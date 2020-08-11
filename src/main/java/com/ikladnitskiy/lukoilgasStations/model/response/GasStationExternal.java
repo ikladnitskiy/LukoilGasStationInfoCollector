@@ -3,7 +3,6 @@ package com.ikladnitskiy.lukoilgasStations.model.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * Часть объекта ответа сервера данных, содержащий ID АЗС.
@@ -11,8 +10,7 @@ import lombok.EqualsAndHashCode;
  * @see RollGasStationsResponse
  */
 @Data
-@EqualsAndHashCode
-public class GasStationResp {
+public class GasStationExternal {
 
   @JsonProperty("GasStationId")
   private Integer gasStationId;

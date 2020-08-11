@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class InfoResp {
+public class InfoExternal {
 
   @JsonProperty("GasStationId")
   private Integer id;
@@ -39,7 +39,7 @@ public class InfoResp {
   @JsonProperty("GasStationStatus")
   private Integer gasStationStatus;
   @JsonProperty("Company")
-  private CompanyResp company;
+  private CompanyExternal company;
   @JsonProperty("Name")
   private String name;
   @JsonProperty("Address")
@@ -53,12 +53,12 @@ public class InfoResp {
   @JsonProperty("SellsOil")
   private Boolean sellsOil;
   @JsonProperty("Services")
-  private List<ServiceResp> services;
+  private List<ServiceExternal> services;
   @JsonProperty("PaymentTypes")
-  private List<PaymentTypeResp> paymentTypes;
+  private List<PaymentTypeExternal> paymentTypes;
   @JsonProperty("Features")
-  private List<FeatureResp> features;
+  private List<FeatureExternal> features;
   @JsonProperty("Properties")
-  private List<PropertyResp> properties;
+  private List<PropertyExternal> properties;
 
 }

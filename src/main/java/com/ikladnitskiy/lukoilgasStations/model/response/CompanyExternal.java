@@ -6,11 +6,11 @@ import lombok.Data;
 /**
  * Часть объекта ответа сервера данных, содержащий информацию о компании-собственнике АЗС.
  *
- * @see InfoResp
+ * @see InfoExternal
  * @see GasStationInfoResponse
  */
 @Data
-public class CompanyResp {
+public class CompanyExternal {
 
   @JsonProperty("CompanyId")
   private Integer companyId;

@@ -3,18 +3,16 @@ package com.ikladnitskiy.lukoilgasStations.model.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * Часть объекта ответа сервера данных, содержащий информацию о способе оплаты на АЗС.
  *
- * @see InfoResp
+ * @see InfoExternal
  * @see GasStationInfoResponse
  */
 @Data
-@EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PaymentTypeResp {
+public class PaymentTypeExternal {
 
   @JsonProperty("PaymentTypeId")
   private Integer paymentTypeId;

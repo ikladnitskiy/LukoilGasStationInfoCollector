@@ -13,6 +13,6 @@ public class RollGasStationsResponse {
   @JsonProperty("FuelClasses")
   private List<Integer> fuelClasses;
   @JsonProperty("GasStations")
-  private List<GasStationResp> gasStations;
+  private List<GasStationExternal> gasStations;
 
 }
