@@ -5,7 +5,8 @@ import com.ikladnitskiy.lukoilgasStations.model.GasStation;
 import com.ikladnitskiy.lukoilgasStations.model.response.GasStationExternal;
 import com.ikladnitskiy.lukoilgasStations.model.response.GasStationInfoResponse;
 import com.ikladnitskiy.lukoilgasStations.model.response.RollGasStationsResponse;
-import com.ikladnitskiy.lukoilgasStations.utils.connection.ConnectionUtils;
+import com.ikladnitskiy.lukoilgasStations.repository.GasStationRepository;
+import com.ikladnitskiy.lukoilgasStations.utils.HttpsConnectionUtils;
 import com.ikladnitskiy.lukoilgasStations.utils.converter.GasStationConverter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,29 +25,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class GasStationCollectorServiceImpl implements GasStationCollectorService {
 
+  private GasStationRepository repository;
   private ObjectMapper mapper = new ObjectMapper();
-  private GasStationConverter converter;
 
   @Autowired
-  public GasStationCollectorServiceImpl(GasStationConverter converter) {
-    this.converter = converter;
+  public GasStationCollectorServiceImpl(GasStationRepository repository) {
+    this.repository = repository;
   }
 
   @Override
   public List<Integer> getGasStationIdList() throws Exception {
-    HttpsURLConnection conn = ConnectionUtils.getRollStationsConnection();
+    HttpsURLConnection conn = HttpsConnectionUtils.getRollStationsConnection();
     if (conn == null) {
       return null;
     }
     if (conn.getResponseCode() != 200) {
       log.info("Не удалось получить данные с сервера. Код ответа: {}", conn.getResponseCode());
-      ConnectionUtils.closeConnection(conn);
+      HttpsConnectionUtils.closeConnection(conn);
     }
     String json;
     try (BufferedReader reader = new BufferedReader(
         new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
       json = reader.lines().collect(Collectors.joining(System.lineSeparator()));
-      ConnectionUtils.closeConnection(conn);
+      HttpsConnectionUtils.closeConnection(conn);
     }
 
     RollGasStationsResponse roll = mapper.readValue(json, RollGasStationsResponse.class);
@@ -57,20 +58,20 @@ public class GasStationCollectorServiceImpl implements GasStationCollectorServic
 
   @Override
   public GasStation getGasStation(Integer gasStationId) throws Exception {
-    HttpsURLConnection conn = ConnectionUtils.getGasStationConnection(gasStationId);
+    HttpsURLConnection conn = HttpsConnectionUtils.getGasStationConnection(gasStationId);
     if (conn == null) {
       return null;
     }
     if (conn.getResponseCode() != 200) {
       log.info("Не удалось получить данные с сервера. Код ответа: {}", conn.getResponseCode());
-      ConnectionUtils.closeConnection(conn);
+      HttpsConnectionUtils.closeConnection(conn);
     }
     StringBuilder builder;
     try (BufferedReader reader = new BufferedReader(
         new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
       builder = new StringBuilder(
           reader.lines().collect(Collectors.joining(System.lineSeparator())));
-      ConnectionUtils.closeConnection(conn);
+      HttpsConnectionUtils.closeConnection(conn);
     }
     String json = builder.substring(1, builder.length() - 1);
 

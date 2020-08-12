@@ -1,4 +1,4 @@
-package com.ikladnitskiy.lukoilgasStations.utils.connection;
+package com.ikladnitskiy.lukoilgasStations.utils;
 
 import com.sun.net.ssl.internal.ssl.Provider;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * Утилитный класс для получения соединения с сервисом данных.
  */
 @Slf4j
-public class ConnectionUtils {
+public class HttpsConnectionUtils {
 
   private static final String HOST_ROLL_STATIONS = "https://auto.lukoil.ru/api/cartography/"
       + "GetCountryDependentSearchObjectData?form=gasStation&country=RU";
