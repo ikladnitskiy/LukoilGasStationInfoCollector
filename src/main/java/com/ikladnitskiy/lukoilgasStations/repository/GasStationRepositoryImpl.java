@@ -3,7 +3,6 @@ package com.ikladnitskiy.lukoilgasStations.repository;
 import com.ikladnitskiy.lukoilgasStations.model.GasStation;
 import com.ikladnitskiy.lukoilgasStations.utils.JdbcUtils;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +16,9 @@ import org.springframework.stereotype.Repository;
 public class GasStationRepositoryImpl implements GasStationRepository {
 
   /**
-   * Данный метод выполняет полученный из {@link JdbcUtils} SQL-скрипт и создает тадлицы в базе
-   * данных.
+   * Данный метод выполняет полученный SQL-скрипт и создает тадлицы в базе данных.
+   *
+   * @see JdbcUtils#getInitSql()
    */
   @Override
   public void createTables() {
@@ -33,11 +33,18 @@ public class GasStationRepositoryImpl implements GasStationRepository {
     }
   }
 
+  /**
+   * Метод сохраняет сущность GasStation в базу данных.
+   */
   @Override
   public void saveGasStation(GasStation station) {
     try (Connection conn = JdbcUtils.getConnection();
-        PreparedStatement stmt = conn.prepareStatement("")) {
-
+        Statement stmt = conn.createStatement()) {
+      conn.setAutoCommit(false);
+      JdbcUtils.toPrepareStatement(stmt, station);
+      stmt.executeBatch();
+      conn.commit();
+      log.info("АЗС ID: {} успешно сохранена.", station.getGasStationId());
     } catch (ClassNotFoundException ex) {
       log.error("Ошибка соединения с базой данных: {}", ex.getMessage());
     } catch (SQLException ex) {
