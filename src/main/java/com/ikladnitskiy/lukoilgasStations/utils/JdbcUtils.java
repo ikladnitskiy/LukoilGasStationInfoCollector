@@ -75,6 +75,7 @@ public class JdbcUtils {
             station.getDisplayName(), station.getAddress(), station.getTwentyFourHour(),
             station.getHasStory(), station.getSellsOil()));
 
+    toPrepareCompanyStatement(stmt, station.getGasStationId(), station.getCompany());
     toPrepareServiceStatement(stmt, station.getGasStationId(), station.getServiceList());
     toPreparePaymentTypeStatement(stmt, station.getGasStationId(), station.getPaymentTypeList());
     toPrepareFeatureStatement(stmt, station.getGasStationId(), station.getFeatureList());
