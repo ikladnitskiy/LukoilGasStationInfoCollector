@@ -115,6 +115,9 @@ public class GasStationRepositoryImpl implements GasStationRepository {
 
       station = JdbcUtils.mapGasStation(
           stmt.executeQuery(String.format(GET_STATION_BY_ID_SQL, id)));
+      if (station == null) {
+        return null;
+      }
       station.setCompany(getCompanyByStationId(stmt, id));
       station.setServiceList(getServiceListByStationId(stmt, id));
       station.setPaymentTypeList(getPaymentTypeListByStationId(stmt, id));

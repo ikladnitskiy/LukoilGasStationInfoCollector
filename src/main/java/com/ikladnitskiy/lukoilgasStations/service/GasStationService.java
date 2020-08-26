@@ -14,8 +14,6 @@ public interface GasStationService {
 
   GasStation getGasStationById(Integer id);
 
-  void getTwelveRecords() throws Exception;
-
   void refreshData() throws Exception;
 
 }

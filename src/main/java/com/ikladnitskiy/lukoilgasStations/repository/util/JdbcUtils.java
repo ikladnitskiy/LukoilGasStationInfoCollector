@@ -162,9 +162,10 @@ public class JdbcUtils {
         + "(station_id, fuel_id, name, price, display_price, company_price, company_price_type, currency_iso_code, currency_display_name) "
         + "VALUES (%d, %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s');";
     for (Fuel fuel : fuels) {
-      stmt.addBatch(String.format(SAVE_FUEL_SQL, gasStationId, fuel.getFuelId(), fuel.getPrice(),
-          fuel.getName(), fuel.getDisplayPrice(), fuel.getCompanyPrice(),
-          fuel.getCompanyPriceType(), fuel.getCurrencyIsoCode(), fuel.getCurrencyDisplayName()));
+      stmt.addBatch(String
+          .format(SAVE_FUEL_SQL, gasStationId, fuel.getFuelId(), fuel.getName(), fuel.getPrice(),
+              fuel.getDisplayPrice(), fuel.getCompanyPrice(), fuel.getCompanyPriceType(),
+              fuel.getCurrencyIsoCode(), fuel.getCurrencyDisplayName()));
     }
   }
 
@@ -189,8 +190,9 @@ public class JdbcUtils {
       station.setTwentyFourHour(rs.getBoolean("twenty_four_hour"));
       station.setHasStory(rs.getBoolean("has_story"));
       station.setSellsOil(rs.getBoolean("sells_oil"));
+      return station;
     }
-    return station;
+    return null;
   }
 
   public static Company mapCompany(ResultSet rs) throws SQLException {

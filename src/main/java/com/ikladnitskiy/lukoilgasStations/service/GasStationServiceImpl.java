@@ -3,6 +3,7 @@ package com.ikladnitskiy.lukoilgasStations.service;
 import com.ikladnitskiy.lukoilgasStations.model.GasStation;
 import com.ikladnitskiy.lukoilgasStations.repository.GasStationRepository;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,29 @@ public class GasStationServiceImpl implements GasStationService {
   }
 
   /**
+   * Метод инициализирует базу данных и размещает в ней двенадцать записей с информацией об АЗС,
+   * полученных с сервера данных.
+   */
+  @PostConstruct
+  public void setUpData() {
+    log.info("Создание таблиц в базе данных...");
+    repository.createTables();
+    try {
+      List<Integer> gasStationIds = collectorService.getGasStationIdList();
+      gasStationIds.stream().limit(12).forEach(id -> {
+        try {
+          GasStation station = collectorService.getGasStation(id);
+          repository.saveGasStation(station);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      });
+    } catch (Exception ex) {
+      log.error("Произошла ошибка предзагрузки данных!" + "\n" + ex.getMessage());
+    }
+  }
+
+  /**
    * Метод возвращает количество АЗС, хранящихся в базе данных.
    */
   @Override
@@ -32,7 +56,7 @@ public class GasStationServiceImpl implements GasStationService {
   }
 
   /**
-   * Метод возвращает номерной список (являющихся ID) сущностей GasStation, хранящихся в базе
+   * Метод возвращает список ID сущностей GasStation, хранящихся в базе
    * данных.
    */
   @Override
@@ -49,28 +73,9 @@ public class GasStationServiceImpl implements GasStationService {
   }
 
   /**
-   * Метод загружает с сервера данных информацию о двенадцати АЗС и сохраняет их в базу данных.
-   * Добавлен для случаев, когда нет необходимости загружать весь объем данных об АЗС.
-   */
-  @Override
-  public void getTwelveRecords() throws Exception {
-    repository.createTables();
-    List<Integer> gasStationIds = collectorService.getGasStationIdList();
-    gasStationIds.stream().limit(12).forEach(id -> {
-      try {
-        GasStation station = collectorService.getGasStation(id);
-        repository.saveGasStation(station);
-      } catch (Exception ex) {
-        ex.printStackTrace();
-      }
-    });
-  }
-
-  /**
    * Метод загружает с сервера данных всю имеющуюся информацию об АЗС и сохраняет в базу данных.
    * Ввиду большого объема данных и линейности алгоритма загрузки и сохранения данных - полная
-   * загрузка может занять длительное время. Для загрузки части данных предпочтительнее использовать
-   * другой метод {@see getTwelveRecords}.
+   * загрузка может занять длительное время.
    */
   @Override
   public void refreshData() throws Exception {
