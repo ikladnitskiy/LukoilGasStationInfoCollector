@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Интерфейс, перечисляющий методы для сбора данных.
  */
-public interface GasStationCollectorService {
+public interface CollectorService {
 
   List<Integer> getGasStationIdList() throws Exception;
 

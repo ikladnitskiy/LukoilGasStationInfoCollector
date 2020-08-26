@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -60,7 +62,7 @@ public class JdbcUtils {
   /**
    * Метод формирует SQL-запрос для сохранения сущности GasStation в базу данных.
    */
-  public static Statement toPrepareStatement(Statement stmt, GasStation station)
+  public static void toPrepareStatement(Statement stmt, GasStation station)
       throws SQLException {
     final String SAVE_GAS_STATION_SQL =
         "INSERT INTO stations "
@@ -81,7 +83,6 @@ public class JdbcUtils {
     toPrepareFeatureStatement(stmt, station.getGasStationId(), station.getFeatureList());
     toPreparePropertyStatement(stmt, station.getGasStationId(), station.getPropertyList());
     toPrepareFuelStatement(stmt, station.getGasStationId(), station.getFuelList());
-    return stmt;
   }
 
   private static void toPrepareCompanyStatement(Statement stmt, Integer gasStationId,
@@ -165,5 +166,106 @@ public class JdbcUtils {
           fuel.getName(), fuel.getDisplayPrice(), fuel.getCompanyPrice(),
           fuel.getCompanyPriceType(), fuel.getCurrencyIsoCode(), fuel.getCurrencyDisplayName()));
     }
+  }
+
+  //mappers
+  public static GasStation mapGasStation(ResultSet rs) throws SQLException {
+    GasStation station = new GasStation();
+    if (rs.last()) {
+      station.setGasStationId(rs.getInt("id"));
+      station.setLatitude(rs.getDouble("latitude"));
+      station.setLongitude(rs.getDouble("longitude"));
+      station.setStationNumber(rs.getString("station_number"));
+      station.setRegionId(rs.getInt("region_id"));
+      station.setFederalLineId(rs.getInt("federal_line_id"));
+      station.setManagerFullName(rs.getString("manager_full_name"));
+      station.setEmail(rs.getString("email"));
+      station.setPhone(rs.getString("phone"));
+      station.setFax(rs.getString("fax"));
+      station.setGasStationStatus(rs.getInt("station_status"));
+      station.setName(rs.getString("name"));
+      station.setDisplayName(rs.getString("display_name"));
+      station.setAddress(rs.getString("address"));
+      station.setTwentyFourHour(rs.getBoolean("twenty_four_hour"));
+      station.setHasStory(rs.getBoolean("has_story"));
+      station.setSellsOil(rs.getBoolean("sells_oil"));
+    }
+    return station;
+  }
+
+  public static Company mapCompany(ResultSet rs) throws SQLException {
+    Company company = new Company();
+    if (rs.last()) {
+      company.setCompanyId(rs.getInt("company_id"));
+      company.setName(rs.getString("name"));
+      company.setPhone(rs.getString("phone"));
+      company.setFax(rs.getString("fax"));
+      company.setEmail(rs.getString("email"));
+      company.setDatabaseHomePageUrl(rs.getString("database_home_page_url"));
+      company.setHomePageUrl(rs.getString("home_page_url"));
+    }
+    return company;
+  }
+
+  public static List<Service> mapServices(ResultSet rs) throws SQLException {
+    List<Service> serviceList = new ArrayList<>();
+    while (rs.next()) {
+      Service service = new Service();
+      service.setServiceId(rs.getInt("service_id"));
+      service.setName(rs.getString("name"));
+      service.setServiceGroupId(rs.getInt("service_group_id"));
+      serviceList.add(service);
+    }
+    return serviceList;
+  }
+
+  public static List<PaymentType> mapPaymentTypes(ResultSet rs) throws SQLException {
+    List<PaymentType> paymentTypeList = new ArrayList<>();
+    while (rs.next()) {
+      PaymentType paymentType = new PaymentType();
+      paymentType.setPaymentTypeId(rs.getInt("payment_type_id"));
+      paymentType.setName(rs.getString("name"));
+      paymentTypeList.add(paymentType);
+    }
+    return paymentTypeList;
+  }
+
+  public static List<Feature> mapFeatures(ResultSet rs) throws SQLException {
+    List<Feature> featureList = new ArrayList<>();
+    while (rs.next()) {
+      Feature feature = new Feature();
+      feature.setFeatureId(rs.getInt("feature_id"));
+      feature.setName(rs.getString("name"));
+      featureList.add(feature);
+    }
+    return featureList;
+  }
+
+  public static List<Property> mapProperties(ResultSet rs) throws SQLException {
+    List<Property> propertyList = new ArrayList<>();
+    while (rs.next()) {
+      Property property = new Property();
+      property.setPropertyId(rs.getInt("property_id"));
+      property.setName(rs.getString("name"));
+      propertyList.add(property);
+    }
+    return propertyList;
+  }
+
+  public static List<Fuel> mapFuels(ResultSet rs) throws SQLException {
+    List<Fuel> fuelList = new ArrayList<>();
+    while (rs.next()) {
+      Fuel fuel = new Fuel();
+      fuel.setFuelId(rs.getInt("fuel_id"));
+      fuel.setName(rs.getString("name"));
+      fuel.setPrice(rs.getString("price"));
+      fuel.setDisplayPrice(rs.getString("display_price"));
+      fuel.setCompanyPrice(rs.getString("company_price"));
+      fuel.setCompanyPriceType(rs.getString("company_price_type"));
+      fuel.setCurrencyIsoCode(rs.getString("currency_iso_code"));
+      fuel.setCurrencyDisplayName(rs.getString("currency_display_name"));
+      fuelList.add(fuel);
+    }
+    return fuelList;
   }
 }

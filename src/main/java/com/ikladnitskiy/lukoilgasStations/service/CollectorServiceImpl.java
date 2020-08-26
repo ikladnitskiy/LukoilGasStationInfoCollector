@@ -5,7 +5,6 @@ import com.ikladnitskiy.lukoilgasStations.model.GasStation;
 import com.ikladnitskiy.lukoilgasStations.model.response.GasStationExternal;
 import com.ikladnitskiy.lukoilgasStations.model.response.GasStationInfoResponse;
 import com.ikladnitskiy.lukoilgasStations.model.response.RollGasStationsResponse;
-import com.ikladnitskiy.lukoilgasStations.repository.GasStationRepository;
 import com.ikladnitskiy.lukoilgasStations.utils.HttpsConnectionUtils;
 import com.ikladnitskiy.lukoilgasStations.utils.converter.GasStationConverter;
 import java.io.BufferedReader;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.net.ssl.HttpsURLConnection;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,16 +21,14 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class GasStationCollectorServiceImpl implements GasStationCollectorService {
+public class CollectorServiceImpl implements CollectorService {
 
-  private GasStationRepository repository;
   private ObjectMapper mapper = new ObjectMapper();
 
-  @Autowired
-  public GasStationCollectorServiceImpl(GasStationRepository repository) {
-    this.repository = repository;
-  }
-
+  /**
+   * Метод позволяет подключиться к серверу данных и получить JSON, содержащий данные, включающие в
+   * себя ID АЗС. Возвращает список ID АЗС.
+   */
   @Override
   public List<Integer> getGasStationIdList() throws Exception {
     HttpsURLConnection conn = HttpsConnectionUtils.getRollStationsConnection();
@@ -56,6 +52,10 @@ public class GasStationCollectorServiceImpl implements GasStationCollectorServic
         .collect(Collectors.toList());
   }
 
+  /**
+   * Метод позволяет подключиться к серверу данных для получения подробной информации об АЗС по ее
+   * ID. Полученный с сервера JSON конвертируется во внутреннюю сущность для удобной работы с ней.
+   */
   @Override
   public GasStation getGasStation(Integer gasStationId) throws Exception {
     HttpsURLConnection conn = HttpsConnectionUtils.getGasStationConnection(gasStationId);
@@ -74,7 +74,6 @@ public class GasStationCollectorServiceImpl implements GasStationCollectorServic
       HttpsConnectionUtils.closeConnection(conn);
     }
     String json = builder.substring(1, builder.length() - 1);
-
     return GasStationConverter.convert(mapper.readValue(json, GasStationInfoResponse.class));
   }
 }
