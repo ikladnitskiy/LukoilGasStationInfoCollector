@@ -1,4 +1,4 @@
-package com.ikladnitskiy.lukoilgasStations.utils;
+package com.ikladnitskiy.lukoilgasStations.repository.util;
 
 import com.ikladnitskiy.lukoilgasStations.model.Company;
 import com.ikladnitskiy.lukoilgasStations.model.Feature;

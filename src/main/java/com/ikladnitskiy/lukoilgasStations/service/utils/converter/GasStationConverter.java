@@ -1,4 +1,4 @@
-package com.ikladnitskiy.lukoilgasStations.utils.converter;
+package com.ikladnitskiy.lukoilgasStations.service.utils.converter;
 
 import com.ikladnitskiy.lukoilgasStations.model.Company;
 import com.ikladnitskiy.lukoilgasStations.model.Feature;

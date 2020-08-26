@@ -7,7 +7,7 @@ import com.ikladnitskiy.lukoilgasStations.model.GasStation;
 import com.ikladnitskiy.lukoilgasStations.model.PaymentType;
 import com.ikladnitskiy.lukoilgasStations.model.Property;
 import com.ikladnitskiy.lukoilgasStations.model.Service;
-import com.ikladnitskiy.lukoilgasStations.utils.JdbcUtils;
+import com.ikladnitskiy.lukoilgasStations.repository.util.JdbcUtils;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

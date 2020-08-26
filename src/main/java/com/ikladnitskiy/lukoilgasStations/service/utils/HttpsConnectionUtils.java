@@ -1,4 +1,4 @@
-package com.ikladnitskiy.lukoilgasStations.utils;
+package com.ikladnitskiy.lukoilgasStations.service.utils;
 
 import com.sun.net.ssl.internal.ssl.Provider;
 import java.io.IOException;
